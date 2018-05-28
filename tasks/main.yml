@@ -1,2 +1,14 @@
 ---
-# tasks file for ansible-systemd-shoryuken
+- name: Skoryuken | Service Template
+  template:
+    src: shoryuken.service
+    dest: /lib/systemd/system/shoryuken.service
+    owner: root
+    group: root
+  become: yes
+- name: Shoryuken | Enable Process
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    name: shoryuken
+    state: started
