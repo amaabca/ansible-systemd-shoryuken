@@ -1,0 +1,17 @@
+[Unit]
+Description=shoryuken
+After=syslog.target network.target
+
+[Service]
+Type=simple
+SyslogIdentifier=shoryuken
+User={{ ansible_systemd_shoryuken_user }}
+WorkingDirectory={{ ansible_systemd_shoryuken_app_path }}/current
+EnvironmentFile={{ ansible_systemd_shoryuken_app_path }}/current/.env
+PIDFile={{ ansible_systemd_shoryuken_app_path }}/shared/tmp/pids/shoryuken.pid
+ExecStart={{ ansible_systemd_shoryuken_app_path }}/current/bin/bundle exec shoryuken start --pidfile {{ ansible_systemd_shoryuken_app_path }}/shared/tmp/pids/shoryuken.pid --logfile {{ ansible_systemd_shoryuken_app_path }}/shared/log/shoryuken.log --config config/shoryuken.yml --rails
+ExecStop=/bin/kill --signal USR1 $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
